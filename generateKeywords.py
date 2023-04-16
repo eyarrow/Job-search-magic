@@ -24,8 +24,12 @@ def generateKeywords(parsedPage: str) -> str:
   for word in keywords:
     print(word)
 
-post = 'job-content'
-urlToUse = 'https://jobs.nike.com/job/IR763?from=job%20search%20funnel'
+# Saves a 'preetified' version of the whole job description
+def generateJobDescription(contentToParse: str) -> str:
+  
+
+post = 'description'
+urlToUse = 'https://careers.azenta.com/job/1417/us_payroll_manager'
 rawPage = getWebpage(urlToUse)
 parsedPage = parseHTML(rawPage, post)
 generateKeywords(parsedPage)

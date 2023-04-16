@@ -3,6 +3,13 @@ import requests
 from bs4 import BeautifulSoup
 import yake
 
+post = 'description'
+url_to_use = 'https://careers.azenta.com/job/1417/us_payroll_manager'
+employer = 'Azenta'
+directory = employer
+save_path = '/home/elizabeth/jobs'
+file_name = f"job-description-{employer}.txt"
+
 # Scrape html content from the provided web page
 def get_webpage(url: str) -> str:
   page = requests.get(url)
@@ -35,16 +42,18 @@ def generate_job_description(content_to_parse: str) -> str:
 
 # Set the file settings for saving the final file
 def set_file_config(save_path: str, file_name: str) -> str:
+  # dynamically set file name here
+  # check to make sure the file name does not already exist
+  # if it does increment it
   return os.path.join(save_path, file_name)
 
 # Set the location to save the file here
-save_path = '/home/elizabeth/jobs'
-file_name = "test2.txt"
+path = os.path.join(save_path, directory)
+os.mkdir(path)
+
 
 complete_name = set_file_config(save_path, file_name)
-post = 'description'
-url_to_use = 'https://careers.azenta.com/job/1417/us_payroll_manager'
-employer = 'Azenta'
+
 raw_page = get_webpage(url_to_use)
 parsed_page = parse_html(raw_page, post)
 job_description = generate_job_description(raw_page)
@@ -52,6 +61,6 @@ keyword = generate_keywords(parsed_page)
 
 file_to_write = "Employer:  " + employer + '\n' + '\n' + "URL: " + url_to_use + '\n' + '\n' + "Job Description: " + job_description +  '\n' +'\n' + "Keywords: " 
 
-file1 = open(complete_name, "w")
-file1.write(file_to_write)
-file1.close
+# file1 = open(complete_name, "w")
+# file1.write(file_to_write)
+# file1.close

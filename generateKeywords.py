@@ -1,6 +1,9 @@
+import os
 import requests
 from bs4 import BeautifulSoup
 import yake
+
+# Todo: Change all variable to snake case
 
 # Scrape html content from the provided web page
 def getWebpage(url: str) -> str:
@@ -31,10 +34,23 @@ def generateJobDescription(contentToParse: str) -> str:
     data_str = data_str + item.get_text(separator='\n')
   return data_str
 
-post = 'description'
-urlToUse = 'https://careers.azenta.com/job/1417/us_payroll_manager'
-rawPage = getWebpage(urlToUse)
-parsedPage = parseHTML(rawPage, post)
-jobDescription = generateJobDescription(rawPage)
-#generateKeywords(parsedPage)
-print(jobDescription)
+# Set the file settings for saving the final file
+def setFileConfig(save_path: str, file_name: str) -> str:
+  return os.path.join(save_path, file_name)
+
+# Set the location to save the file here
+save_path = '/home/elizabeth/jobs'
+file_name = "test2.txt"
+
+complete_name = setFileConfig(save_path, file_name)
+# post = 'description'
+# urlToUse = 'https://careers.azenta.com/job/1417/us_payroll_manager'
+# rawPage = getWebpage(urlToUse)
+# parsedPage = parseHTML(rawPage, post)
+# jobDescription = generateJobDescription(rawPage)
+# #generateKeywords(parsedPage)
+# print(jobDescription)
+
+file1 = open(complete_name, "w")
+file1.write("something else")
+file1.close

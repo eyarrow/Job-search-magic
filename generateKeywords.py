@@ -17,8 +17,15 @@ def parseHTML(contentToParse: str, classToUse: str) -> str:
     data_str = data_str + item.get_text() + " "
   return data_str
 
-post = 'section'
-urlToUse = 'https://www.amazon.jobs/en/jobs/2350484/software-development-engineer-ii'
+# Generate a list of keywords based on the parsed text
+def generateKeywords(parsedPage: str) -> str:
+  kwExtractor = yake.KeywordExtractor()
+  keywords = kwExtractor.extract_keywords(parsedPage)
+  for word in keywords:
+    print(word)
+
+post = 'job-content'
+urlToUse = 'https://jobs.nike.com/job/IR763?from=job%20search%20funnel'
 rawPage = getWebpage(urlToUse)
 parsedPage = parseHTML(rawPage, post)
-print(parsedPage)
+generateKeywords(parsedPage)

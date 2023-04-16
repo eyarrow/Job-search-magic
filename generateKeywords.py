@@ -5,7 +5,7 @@ import yake
 
 post = 'description'
 url_to_use = 'https://careers.azenta.com/job/1417/us_payroll_manager'
-employer = 'Azenta'
+employer = 'Chucky Cheese'
 directory = employer
 save_path = '/home/elizabeth/jobs'
 file_name = f"job-description-{employer}.txt"
@@ -49,7 +49,12 @@ def set_file_config(save_path: str, file_name: str) -> str:
 
 # Set the location to save the file here
 path = os.path.join(save_path, directory)
-os.mkdir(path)
+try:
+  os.mkdir(path)
+except:
+  pass
+
+
 
 
 complete_name = set_file_config(save_path, file_name)

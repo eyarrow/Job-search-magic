@@ -25,11 +25,12 @@ def parse_html(content_to_parse: str, class_to_use: str) -> str:
 
 # Generate a list of keywords based on the parsed text
 def generate_keywords(parsed_page: str) -> str:
+  kw = ""
   kwExtractor = yake.KeywordExtractor()
   keywords = kwExtractor.extract_keywords(parsed_page)
   for word in keywords:
-    print(word)
-  return keywords
+    kw = kw + '\n' + word[0]
+  return kw
 
 # Saves a 'preetified' version of the whole job description, which only pulls from content
 # in paragraph tags and headers
@@ -65,9 +66,11 @@ path_to_write = set_file_config(path, employer)
 raw_page = get_webpage(url_to_use)
 parsed_page = parse_html(raw_page, post)
 job_description = generate_job_description(raw_page)
-keyword = generate_keywords(parsed_page)
+# kw = generate_keywords(parsed_page)
 
-file_to_write = "Employer:  " + employer + '\n' + '\n' + "URL: " + url_to_use + '\n' + '\n' + "Job Description: " + job_description +  '\n' +'\n' + "Keywords: " 
+
+
+file_to_write = "Employer:  " + employer + '\n' + '\n' + "URL: " + url_to_use + '\n' + '\n' + "Job Description: " + job_description +  '\n' +'\n' + "Keywords: " + generate_keywords(parsed_page)
 
 if os.path.isfile(path_to_write):
   print("File is already in use. Please rename the existing file and try again.")

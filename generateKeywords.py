@@ -40,17 +40,19 @@ def setFileConfig(save_path: str, file_name: str) -> str:
 
 # Set the location to save the file here
 save_path = '/home/elizabeth/jobs'
-file_name = "test2.txt"
+file_name = "test5.txt"
 
 complete_name = setFileConfig(save_path, file_name)
-# post = 'description'
-# urlToUse = 'https://careers.azenta.com/job/1417/us_payroll_manager'
-# rawPage = getWebpage(urlToUse)
-# parsedPage = parseHTML(rawPage, post)
-# jobDescription = generateJobDescription(rawPage)
-# #generateKeywords(parsedPage)
-# print(jobDescription)
+post = 'description'
+urlToUse = 'https://careers.azenta.com/job/1417/us_payroll_manager'
+employer = 'Azenta'
+rawPage = getWebpage(urlToUse)
+parsedPage = parseHTML(rawPage, post)
+jobDescription = generateJobDescription(rawPage)
+generateKeywords(parsedPage)
+
+file_to_write = "Employer:  " + employer + '\n' + '\n' + "URL: " + urlToUse + '\n' + '\n' + "Job Description: " + jobDescription +  '\n' +'\n' 
 
 file1 = open(complete_name, "w")
-file1.write("something else")
+file1.write(file_to_write)
 file1.close

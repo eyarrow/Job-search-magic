@@ -118,4 +118,3 @@ if __name__ == '__main__':
     b3 = tk.Button(root, text='Quit', command=root.quit)
     b3.pack(side=tk.LEFT, padx=5, pady=5)
     root.mainloop()
-

@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import yake
 import tkinter as tk
+import datetime
 
 fields = ('Employer Name', 'Job Listing URL', 'File Path to Save to', 'CSS tag for requirements (Optional)', 'Skills Section Text (Optional)' )
 keywords = ""
@@ -34,9 +35,9 @@ def generate_keywords(parsed_page: str) -> str:
 def generate_job_description(content_to_parse: str) -> str:
   soup = BeautifulSoup(content_to_parse, 'html.parser')
   data_str = ""
-  for item in soup.find_all(['p', 'ul', 'h1', 'h2', 'h3']):
-    # can I pull out links
-    data_str = data_str + item.get_text(separator='\n')
+  for item in soup(['style', 'script', 'a']):
+    item.decompose
+  data_str = ' '.join(soup.stripped_strings)
   return data_str
 
 # Adds a directory set by default to the employer's name.
@@ -51,9 +52,6 @@ def generate_directory(save_path: str, directory: str) -> str:
 
 # Set the file settings for saving the final file
 def set_file_config(save_path: str, file_name: str) -> str:
-  # dynamically set file name here
-  # check to make sure the file name does not already exist
-  # if it does increment it
   file_name = f"job-description-{file_name}.txt"
   return os.path.join(save_path, file_name)
 
@@ -64,21 +62,24 @@ def generate_file_usr_input(input: dict) -> dict:
   class_to_use = input['CSS tag for requirements (Optional)'].get()
   url_to_use = input['Job Listing URL'].get()
   skills_section = input['Skills Section Text (Optional)'].get()
-  # save_path = input['File Path to Save to'].get() 
-  save_path = '/home/elizabeth/jobs'
+  save_path = input['File Path to Save to'].get() 
   path = generate_directory(save_path, directory)
   path_to_write = set_file_config(path, employer)
   raw_page = get_webpage(url_to_use)
+  job_description = generate_job_description(raw_page)
   if class_to_use:
     parsed_keywords = parse_html(raw_page, class_to_use)
     keywords = generate_keywords(parsed_keywords)
   elif skills_section:
     keywords = generate_keywords(skills_section)
   else:
-    keywords = ""
+    keywords = generate_keywords(job_description)
+
+  now = datetime.datetime.now()
+  time = now.strftime("%m-%d-%Y %H:%M")
   
-  job_description = generate_job_description(raw_page)
-  file_to_write = "Employer:  " + employer + '\n' + '\n' + "URL: " + url_to_use + '\n' + '\n' + "Job Description: " + job_description +  '\n' +'\n' + "Keywords: " + keywords
+  
+  file_to_write = "Employer:  " + employer + '\n' + '\n' + "URL: " + url_to_use + '\n' + '\n' + "Job Description: " + f"[Extracted {time}]" '\n' + job_description +  '\n' +'\n' + "Keywords: " + keywords
   
   if os.path.isfile(path_to_write):
     print("File is already in use. Please rename the existing file and try again.")

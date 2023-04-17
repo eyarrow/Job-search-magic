@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import yake
 import tkinter as tk
 
-fields = ('Employer Name', 'Job Listing URL', 'File Path to Save to', 'CSS tag for requirements')
+fields = ('Employer Name', 'Job Listing URL', 'File Path to Save to', 'CSS tag for requirements', 'Skills Section Text')
 
 # class_to_use = 'description'
 # url_to_use = 'https://careers.azenta.com/job/1417/us_payroll_manager'
@@ -36,11 +36,11 @@ def generate_keywords(parsed_page: str) -> str:
   return kw
 
 # Saves a 'preetified' version of the whole job description, which only pulls from content
-# in paragraph tags and headers
+# in paragraph tags
 def generate_job_description(content_to_parse: str) -> str:
   soup = BeautifulSoup(content_to_parse, 'html.parser')
   data_str = ""
-  for item in soup.find_all(['p', 'h1', 'h2']):
+  for item in soup.find_all(['p']):
     data_str = data_str + item.get_text(separator='\n')
   return data_str
 
@@ -68,14 +68,15 @@ def generate_file_usr_input(input: dict) -> dict:
   directory = employer
   class_to_use = input['CSS tag for requirements'].get()
   url_to_use = input['Job Listing URL'].get()
-  save_path = input['File Path to Save to'].get() 
+  # save_path = input['File Path to Save to'].get() 
+  save_path = '/home/elizabeth/jobs'
   path = generate_directory(save_path, directory)
-  print(path)
   path_to_write = set_file_config(path, employer)
   raw_page = get_webpage(url_to_use)
   parsed_page = parse_html(raw_page, class_to_use)
   job_description = generate_job_description(raw_page)
   file_to_write = "Employer:  " + employer + '\n' + '\n' + "URL: " + url_to_use + '\n' + '\n' + "Job Description: " + job_description +  '\n' +'\n' + "Keywords: " + generate_keywords(parsed_page)
+  
   if os.path.isfile(path_to_write):
     print("File is already in use. Please rename the existing file and try again.")
   else:
